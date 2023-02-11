@@ -8,11 +8,11 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint src/*",
-    "lint:fix": "eslint src/* --fix"
+    "lint:fix": "eslint --fix --ext .js,.jsx,.ts,tsx ./src"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "yarn run lint"
+      "yarn lint:fix"
     ]
   },
   "dependencies": {
