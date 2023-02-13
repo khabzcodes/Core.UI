@@ -26,5 +26,7 @@ module.exports = {
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
     'prettier/prettier': 0,
+    'jsx-a11y/label-has-associated-control': 0,
+    'react/require-default-props': 0,
   },
 };
