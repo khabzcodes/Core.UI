@@ -1,22 +1,12 @@
-import { HashRouter } from 'react-router-dom';
-import './App.css';
+import AuthProvider from './hooks/AuthProvider';
+import AppRoutes from './navigation/AppRoutes';
 
 function App() {
   return (
-    <div className="App">
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
   );
 }
 
-function WrappedApp() {
-  return (
-    <HashRouter>
-      <App />
-    </HashRouter>
-  );
-}
-
-export default WrappedApp;
+export default App;

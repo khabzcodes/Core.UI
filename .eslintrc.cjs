@@ -14,6 +14,7 @@ module.exports = {
   overrides: [],
   parser: '@typescript-eslint/parser',
   parserOptions: {
+    tsconfigRootDir: __dirname,
     ecmaVersion: 'latest',
     sourceType: 'module',
     project: './tsconfig.json',
@@ -21,7 +22,11 @@ module.exports = {
   plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
     'react/react-in-jsx-scope': 0,
+    'import/no-cycle ': 0,
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
+    'prettier/prettier': 0,
+    'jsx-a11y/label-has-associated-control': 0,
+    'react/require-default-props': 0,
   },
 };
