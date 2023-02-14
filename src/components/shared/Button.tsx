@@ -7,6 +7,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   textColor?: string;
   backgroundColor: string;
   height?: number;
+  isLoading?: boolean;
   onClick: () => void;
 }
 
@@ -16,6 +17,7 @@ const Button: React.FC<ButtonProps> = ({
   backgroundColor,
   textColor,
   height,
+  isLoading,
   onClick,
 }) => {
   return (
@@ -24,6 +26,7 @@ const Button: React.FC<ButtonProps> = ({
       className="btn"
       style={{ backgroundColor, color: textColor, height, borderRadius: 2 }}
       onClick={onClick}
+      disabled={isLoading}
     >
       {text}
     </button>

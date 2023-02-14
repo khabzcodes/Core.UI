@@ -3,36 +3,64 @@
 import { createModel } from '@rematch/core';
 import axios from 'axios';
 import RootModel from '.';
+import BaseErrorResponse from '../../interfaces/authentication/BaseErrorResponse';
 import LoginRequest from '../../interfaces/authentication/request/LoginRequest';
 import AuthResponse from '../../interfaces/authentication/response/AuthResponse';
 
 export interface AuthState {
   isAuthenticated: boolean;
   token: string | null;
+  isLoading: boolean;
+  error: string | null;
+  success: boolean;
 }
+
+// const baseUrl: string | undefined = process.env.REACT_API_URI;
 
 export const auth = createModel<RootModel>()({
   state: {
-    isAuthenticated: false,
     token: localStorage.getItem('accessToken'),
+    isAuthenticated: !!localStorage.getItem('accessToken'),
+    isLoading: false,
+    error: null,
   } as AuthState,
   reducers: {
-    SET_AUTH_STATE: (state, payload: AuthResponse) => {
-      const { token } = payload;
+    SET_TOKEN: (state, token: string | null) => {
       if (typeof token === 'string') {
-        state.isAuthenticated = true;
-        state.token = payload.token;
         localStorage.setItem('accessToken', token);
+        return { ...state, success: true, token, isAuthenticated: true };
       }
+
+      return { ...state, token: null };
+    },
+    START_LOADING: (state) => {
+      return { ...state, isLoading: true };
+    },
+    STOP_LOADING: (state) => {
+      return { ...state, isLoading: false };
+    },
+    SET_ERROR: (state, errorMessage: string | null) => {
+      return { ...state, error: errorMessage };
     },
   },
   effects: (dispatch) => {
-    const { token } = dispatch;
     return {
       async loginUserAsync(request: LoginRequest): Promise<void> {
-        const response = await axios({ method: 'POST', data: request });
-        const { data }: { data: AuthResponse } = await response.data;
-        token.SET_AUTH_STATE(data);
+        dispatch.auth.START_LOADING();
+        dispatch.auth.SET_ERROR(null);
+
+        await axios
+          .post('https://localhost:7057/api/auth/login', request)
+          .then((res) => {
+            const { token }: AuthResponse = res.data;
+            dispatch.auth.SET_TOKEN(token);
+            dispatch.auth.STOP_LOADING();
+          })
+          .catch((error: BaseErrorResponse) => {
+            const errorMessage: string = error.response.data.title;
+            dispatch.auth.SET_ERROR(errorMessage);
+            dispatch.auth.STOP_LOADING();
+          });
       },
     };
   },

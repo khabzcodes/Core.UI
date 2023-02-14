@@ -3,7 +3,6 @@ import {
   Dispatch,
   SetStateAction,
   useEffect,
-  useMemo,
   useState,
 } from 'react';
 
@@ -21,18 +20,17 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
+    if (isAuthenticated) {
       setIsAuthenticated(true);
     }
-  }, []);
+  }, [isAuthenticated]);
 
-  const value = useMemo(
-    () => ({ isAuthenticated, setIsAuthenticated }),
-    [isAuthenticated, setIsAuthenticated]
+  return (
+    // eslint-disable-next-line react/jsx-no-constructed-context-values
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+      {children}
+    </AuthContext.Provider>
   );
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export default AuthProvider;
