@@ -1,12 +1,14 @@
 /* eslint-disable import/no-cycle */
 import { Models } from '@rematch/core';
-import count from './count';
 import { auth } from './auth';
+import { profile } from './profile';
+import { users } from './users';
 
 interface RootModel extends Models<RootModel> {
-  count: typeof count;
   auth: typeof auth;
+  profile: typeof profile;
+  users: typeof users;
 }
 
 export default RootModel;
-export const models: RootModel = { count, auth };
+export const models: RootModel = { auth, profile, users };

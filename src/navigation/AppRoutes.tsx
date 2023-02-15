@@ -8,6 +8,7 @@ import Dashboard from '../pages/home/Dashboard';
 import ProtectedRoute, { ProtectedRouteProps } from './ProtectedRoute';
 import { models } from '../redux/models';
 import PublicRoute from './PublicRoute';
+import Users from '../pages/users/Index';
 
 function AppRoutes() {
   const { isAuthenticated } = useSelector(
@@ -26,6 +27,15 @@ function AppRoutes() {
             <ProtectedRoute
               {...defaultProtectedRouteProps}
               outlet={<Dashboard />}
+            />
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute
+              {...defaultProtectedRouteProps}
+              outlet={<Users />}
             />
           }
         />
