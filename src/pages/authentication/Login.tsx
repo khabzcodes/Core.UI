@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import './login.scss';
 import { Dispatch, RootState } from '../../redux/store';
 import TextInput from '../../components/shared/TextInput';
@@ -11,6 +12,7 @@ function Login() {
   const [password, setPassword] = useState<string>('');
 
   const dispatch = useDispatch<Dispatch>();
+  const navigate = useNavigate();
 
   const { success, isAuthenticated, isLoading, error } = useSelector(
     (state: RootState) => state.auth
@@ -24,9 +26,9 @@ function Login() {
     await dispatch.auth.loginUserAsync(loginData);
   };
 
-  useMemo(() => {
+  useEffect(() => {
     if (isAuthenticated && success) {
-      window.location.href = '/';
+      navigate(0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
