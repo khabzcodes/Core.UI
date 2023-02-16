@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch, RootState } from '../../redux/store';
@@ -16,12 +17,13 @@ function Users() {
           <h2 className="fw-bold">Users</h2>
         </div>
         <div className="px-3 py-3">
-          <table className="table">
+          <table className="table table-hover">
             <thead>
               <tr>
                 <th scope="col">First name</th>
                 <th scope="col">Last name</th>
                 <th scope="col">Email</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -30,6 +32,10 @@ function Users() {
                   <td>{user.firstName}</td>
                   <td>{user.lastName}</td>
                   <td>{user.email}</td>
+                  <td className="fw-lighter">
+                    <NavLink to={`/users/${user.userId}`}>View</NavLink> |{' '}
+                    <a href="/">Update</a> | <a href="/">Delete</a>
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -6,6 +6,7 @@ import RootModel from '.';
 import BaseErrorResponse from '../../interfaces/authentication/BaseErrorResponse';
 import LoginRequest from '../../interfaces/authentication/request/LoginRequest';
 import AuthResponse from '../../interfaces/authentication/response/AuthResponse';
+import setToken from '../../utils/setToken';
 
 export interface AuthState {
   isAuthenticated: boolean;
@@ -27,7 +28,6 @@ export const auth = createModel<RootModel>()({
   reducers: {
     SET_TOKEN: (state, token: string | null) => {
       if (typeof token === 'string') {
-        localStorage.setItem('accessToken', token);
         return { ...state, success: true, token, isAuthenticated: true };
       }
 
@@ -53,6 +53,9 @@ export const auth = createModel<RootModel>()({
           .post('https://localhost:7057/api/auth/login', request)
           .then((res) => {
             const { token }: AuthResponse = res.data;
+            if (token) {
+              setToken(token);
+            }
             dispatch.auth.SET_TOKEN(token);
             dispatch.auth.STOP_LOADING();
           })

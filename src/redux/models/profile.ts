@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { createModel } from '@rematch/core';
-import api from '../../utils/api';
+import axiosInstance from '../../utils/api';
 import RootModel from '.';
 import IProfile from '../../interfaces/profile/Profile';
 import BaseErrorResponse from '../../interfaces/authentication/BaseErrorResponse';
@@ -35,9 +35,12 @@ export const profile = createModel<RootModel>()({
       async getUserProfileAsync(): Promise<void> {
         dispatch.profile.SET_ERROR(null);
         dispatch.profile.START_LOADING();
-
-        await api
-          .get('/api/accounts')
+        await axiosInstance
+          .get('/api/accounts', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            },
+          })
           .then((res) => {
             const { data } = res;
             dispatch.profile.SET_PROFILE(data);
